@@ -15,4 +15,10 @@ Am not responsable for any damages or potential changes brought by other contrib
 
 ## How to
 
-This code exports a function "styled" that takes two parameters, a React component and an object with CSS styles. The function then generates a unique class name based on the styles object and adds the styles to the head of the document using the class name. The function then returns a new component that has the generated class name added to its className prop and renders the original component with the added class name. It also has a check to see if the same class already exists, if it does it will not add the same class again.
+This code exports a function "styled" that takes two parameters, a React component and an object with CSS styles. 
+
+The function then generates a unique class name based on the styles object and adds the styles to the head of the document using the class name. 
+
+The function then returns a new component that has the generated class name added to its className prop and renders the original component with the added class name. 
+
+It also has a check to see if the same class already exists, if it does it will not add the same class again.
