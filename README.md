@@ -15,9 +15,4 @@ Am not responsable for any damages or potential changes brought by other contrib
 
 ## How to
 
-react-styled is a functional component which takes 2 arguments, an element type and a css object and returns back a functional react component.
-It adds your styling in your body head and assigns a unique ID to said element.
-Reuses existent css styling.
-And a few other things.
-
-This README will be edited in the feature and built more properly, so will the function.
+This code exports a function "styled" that takes two parameters, a React component and an object with CSS styles. The function then generates a unique class name based on the styles object and adds the styles to the head of the document using the class name. The function then returns a new component that has the generated class name added to its className prop and renders the original component with the added class name. It also has a check to see if the same class already exists, if it does it will not add the same class again.
