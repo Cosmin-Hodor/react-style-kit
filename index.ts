@@ -2,6 +2,7 @@ const getChar = (position: string) => String.fromCharCode(Number(position) + 64)
 
 const getId = (str: string) => {
   let id = 0;
+
   for (let i = 0; i < str.length; i++) {
     id = (id << 5) + str.charCodeAt(i);
   };
@@ -9,8 +10,10 @@ const getId = (str: string) => {
   return `${((`${id}`).slice(0, 5)).replace('-', '')}-${getChar((`${id}`).slice(-1, `${id}`?.length))}`;
 };
 
+
 const classExists = (className: any) => {
   const styleTags = Array.from(document.head.getElementsByTagName('style'));
+
   for (const styleTag of styleTags) {
     const styleTagText = styleTag.textContent || '';
     const styleRules = styleTagText.split('}');
@@ -24,6 +27,7 @@ const classExists = (className: any) => {
 
   return null;
 };
+
 
 const cssObjectToString = (cssObject: any) => {
   const cssStrings: any[] = [];
@@ -49,15 +53,16 @@ const cssObjectToString = (cssObject: any) => {
   return cssStrings.join('');
 };
 
-const styled = (Component: any, styles: any) => {
-  const cssString = (JSON.stringify(styles) || '').toString();
-  const styling = `${cssObjectToString(styles)}`;
 
-  if (!classExists(`.dom${getId(cssString)}`)) {
-    document.head.insertAdjacentHTML("beforeend", `<style>${styling}</style>`)
-  };
-
+const styled = (Component: any, styles: (props: any) => any) => {
   return (props: any) => {
+    const cssString = (JSON.stringify(styles(props)) || '').toString();
+    const styling = `${cssObjectToString(styles(props))}`;
+
+    if (!classExists(`.dom${getId(cssString)}`)) {
+      document.head.insertAdjacentHTML("beforeend", `<style>${styling}</style>`)
+    };
+
     return (
       <Component {...props} className={`dom-${getId(cssString)}${!!props?.className ? ` ${props?.className}` : ''}`} >
         {props.children}
