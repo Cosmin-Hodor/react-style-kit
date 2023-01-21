@@ -22,3 +22,19 @@ The function then generates a unique class name based on the styles object and a
 The function then returns a new component that has the generated class name added to its className prop and renders the original component with the added class name. 
 
 It also has a check to see if the same class already exists, if it does it will not add the same class again.
+
+### Code example:
+
+```
+import styled from './styled';
+
+const Container = styled('div', (props) => ({
+  background: props.bg,
+  width: '200px',
+  height: '100px',
+}));
+
+<Container bg={'#red'}>
+  This is a simple React component
+</Container>
+```
