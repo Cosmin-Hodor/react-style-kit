@@ -34,7 +34,7 @@ const Container = styled('div', (props) => ({
   height: '100px',
 }));
 
-<Container bg={'#red'}>
+<Container bg={'red'}>
   This is a simple React component
 </Container>
 ```
