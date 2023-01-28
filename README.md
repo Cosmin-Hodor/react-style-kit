@@ -15,7 +15,7 @@ Am not responsable for any damages or potential changes brought by other contrib
 
 ## How to
 
-This code exports a single function styled that takes two arguments: a React component and a function that returns a CSS object.
+This code exports a single function styled that takes two arguments: a React component and a CSS object.
 
 The styled function generates a unique class name based on the CSS object passed to it, and checks if that class name already exists in the page's head tag.
 
