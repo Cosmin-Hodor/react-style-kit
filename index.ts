@@ -1,4 +1,5 @@
 /**
+  Returns an alphabete character at specificed position
   @function
   @param {number} position - The position of a character in the alphabet (1-based)
   @returns {string} - The corresponding character in the alphabet
@@ -6,6 +7,7 @@
 const getChar = (position: number): string => String.fromCharCode(Number(position) + 64);
 
 /**
+  Generates a unique hash number from a seed string
   @function
   @param {string} str - The input string
   @returns {string} - A unique identifier based on the input string
