@@ -1,13 +1,12 @@
-const getChar = (position: string) => String.fromCharCode(Number(position) + 64);
+const getChar = (position: number) => String.fromCharCode(Number(position) + 64);
 
 const getId = (str: string) => {
-  let id = 0;
-
+  let hash = 0;
   for (let i = 0; i < str.length; i++) {
-    id = (id << 5) + str.charCodeAt(i);
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
   };
 
-  return `${((`${id}`).slice(0, 5)).replace('-', '')}-${getChar((`${id}`).slice(-1, `${id}`?.length))}`;
+  return `${(hash.toString().substring(0, 5)).replace('-', '')}-${getChar(Math.abs(hash % 10))}`;
 };
 
 
@@ -28,13 +27,12 @@ const classExists = (className: any) => {
   return null;
 };
 
-
 const cssObjectToString = (cssObject: any) => {
   const cssStrings: any[] = [];
   const cssString = (JSON.stringify(cssObject) || '').toString();
 
   function traverse(obj: any, selector = '', newScope = false) {
-    const pointer = `${cssStrings?.length ? '}' : ''}.dom-${getId(cssString)} ${newScope ? selector : ''} {`;
+    const pointer = `${cssStrings?.length ? '}' : ''}.dom-${getId(cssString)} ${newScope ? selector : ''} { `;
     cssStrings.push(pointer);
 
     for (const property in obj) {
@@ -43,23 +41,30 @@ const cssObjectToString = (cssObject: any) => {
       } else {
         const cssProperty = property.replace(/([A-Z])/g, '-$1').toLowerCase();
         const value = obj[property];
-        cssStrings.push(`${cssProperty}: ${value};`);
+        if (value) {
+          cssStrings.push(`${cssProperty}: ${value}; `);
+        };
       };
     };
-    !newScope && cssStrings.push('}');
+    !newScope && cssStrings.push(' }');
   };
 
   traverse(cssObject);
   return cssStrings.join('');
 };
 
+type SortedCSSObject = {
+  [key: string]: string,
+};
 
 const styled = (Component: any, styles: (props: any) => any) => {
   return (props: any) => {
-    const cssString = (JSON.stringify(styles(props)) || '').toString();
-    const styling = `${cssObjectToString(styles(props))}`;
+    let sortedObject: SortedCSSObject = {};
+    Object.keys(styles(props)).sort().forEach(key => sortedObject[key] = styles(props)[key]);
+    const cssString = (JSON.stringify(sortedObject) || '').toString();
+    const styling = `${cssObjectToString(sortedObject)}`;
 
-    if (!classExists(`.dom${getId(cssString)}`)) {
+    if (!classExists(`.dom-${getId(cssString)}`)) {
       document.head.insertAdjacentHTML("beforeend", `<style>${styling}</style>`)
     };
 
