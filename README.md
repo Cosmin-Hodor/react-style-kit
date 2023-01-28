@@ -38,3 +38,9 @@ const Container = styled('div', (props) => ({
   This is a simple React component
 </Container>
 ```
+
+#### Support
+If you enjoy the work and want to reward it, you can [buy me a coffee](https://www.buymeacoffee.com/CHodor), although it really isn't required!
+Freedom of knowledge should be a universal right.
+
+Enjoy!
