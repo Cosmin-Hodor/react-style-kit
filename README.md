@@ -15,13 +15,23 @@ Am not responsable for any damages or potential changes brought by other contrib
 
 ## How to
 
-This code exports a function "styled" that takes two parameters, a React component and an object with CSS styles. 
+This code exports a single function styled that takes two arguments: a React component and a function that returns a CSS object.
 
-The function then generates a unique class name based on the styles object and adds the styles to the head of the document using the class name. 
+The styled function generates a unique class name based on the CSS object passed to it, and checks if that class name already exists in the page's head tag.
 
-The function then returns a new component that has the generated class name added to its className prop and renders the original component with the added class name. 
+If the class name does not exist, it creates a new style tag with the styles defined in the CSS object, and adds the class name to the React component.
 
-It also has a check to see if the same class already exists, if it does it will not add the same class again.
+The generated class name is a combination of a 5-digit hash of the CSS object, and a character derived from the last digit of the hash.
+
+The code uses some utility functions getChar, getId, classExists and cssObjectToString to achieve this.
+
+- getChar takes a position and returns the character that corresponds to that position in the ASCII table.
+
+- getId takes a string, creates a hash from it, and returns a 5-digit hash plus a character that corresponds to the last digit of the hash.
+
+- classExists takes a className, looks in the head tag for all the style tags, checks all the rules in the style tags and returns true if the className passed as argument exists in any of the rules.
+
+- cssObjectToString takes in one parameter, "cssObject", which is of type "any". It converts the "cssObject" to a string and creates an array called "cssStrings" to store the resulting CSS string. The function then uses a recursive helper function called "traverse" to iterate through the properties and values of the "cssObject" and appends them to the "cssStrings" array in the proper CSS syntax. Finally, the function returns the "cssStrings" array joined as a single string.
 
 ### Code example:
 
