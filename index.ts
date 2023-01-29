@@ -94,7 +94,7 @@ const styled = <P extends object, C extends React.ComponentType<P>>(
   styles: (props: P) => object,
 ): React.FunctionComponent<React.PropsWithChildren<P & { className?: string }>> => {
   return (props: React.PropsWithChildren<P & { className?: string }>) => {
-    let sortedObject: { [key: string]: any } = {};
+    const sortedObject: { [key: string]: any } = {};
     const styleProps: { [key: string]: any } = styles(props);
 
     if (styleProps) {
