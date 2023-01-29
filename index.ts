@@ -49,7 +49,7 @@ const classExists = (className: string): (boolean | null) => {
   @param {any} cssObject - The CSS object to be converted to a string.
   @returns {string} - The resulting CSS string.
 */
-const cssObjectToString = (cssObject: any) => {
+const cssObjectToString = (cssObject: object): string => {
   const cssStrings: any[] = [];
   const cssString = (JSON.stringify(cssObject) || '').toString();
 
@@ -59,7 +59,7 @@ const cssObjectToString = (cssObject: any) => {
     @param {any} obj - The current object being traversed.
     @param {string} [selector='', newScope=false] - The current selector and whether a new scope is being created.
   */
-  function traverse(obj: any, selector = '', newScope = false) {
+  function traverse(obj: any, selector: string = '', newScope = false) {
     const pointer = `${cssStrings?.length ? '}' : ''}.dom-${getId(cssString)} ${newScope ? selector : ''} { `;
     cssStrings.push(pointer);
 
@@ -81,10 +81,6 @@ const cssObjectToString = (cssObject: any) => {
   return cssStrings.join('');
 };
 
-type SortedCSSObject = {
-  [key: string]: string,
-};
-
 /**
   The first parameter should always be a React component and the second parameter should always be a function that takes in props and returns an object representing CSS styles, 
   and that the returned function will always return a higher-order component that applies the styles to the passed in component and adds a unique className.
@@ -93,19 +89,33 @@ type SortedCSSObject = {
   @param {Function} styles - A function that takes in props and returns an object representing CSS styles
   @returns {Function} - A higher-order component that applies the styles to the passed in component and adds a unique className
 */
-const styled = (Component: any, styles: (props: any) => any) => {
-  return (props: any) => {
-    let sortedObject: SortedCSSObject = {};
-    Object.keys(styles(props)).sort().forEach(key => sortedObject[key] = styles(props)[key]);
+const styled = <P extends object, C extends React.ComponentType<P>>(
+  Component: C | string,
+  styles: (props: P) => object,
+): React.FunctionComponent<React.PropsWithChildren<P & { className?: string }>> => {
+  return (props: React.PropsWithChildren<P & { className?: string }>) => {
+    let sortedObject: { [key: string]: any } = {};
+    const styleProps: { [key: string]: any } = styles(props);
+
+    if (styleProps) {
+      Object.keys(styleProps).sort().forEach(key => {
+        if (styleProps.hasOwnProperty(key)) {
+          sortedObject[key] = styleProps[key];
+        };
+      });
+    };
+
     const cssString = (JSON.stringify(sortedObject) || '').toString();
     const styling = `${cssObjectToString(sortedObject)}`;
 
     if (!classExists(`.dom-${getId(cssString)}`)) {
-      document.head.insertAdjacentHTML("beforeend", `<style>${styling}</style>`)
+      const style = document.createElement('style');
+      style.innerHTML = styling;
+      document.head.appendChild(style);
     };
 
     return (
-      <Component {...props} className={`dom-${getId(cssString)}${!!props?.className ? ` ${props?.className}` : ''}`} >
+      <Component {...props as P & { className?: string }} className={`dom-${getId(cssString)}${!!props?.className ? ` ${props?.className}` : ''}`} >
         {props.children}
       </Component>
     );
