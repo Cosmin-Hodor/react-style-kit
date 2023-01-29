@@ -1,5 +1,5 @@
 /**
-  Returns an alphabete character at specificed position
+  The position parameter should only accept values between 1 and 26, and that the returned string will always be uppercase.
   @function
   @param {number} position - The position of a character in the alphabet (1-based)
   @returns {string} - The corresponding character in the alphabet
@@ -7,7 +7,7 @@
 const getChar = (position: number): string => String.fromCharCode(Number(position) + 64);
 
 /**
-  Generates a unique hash number from a seed string
+  The input string should only contain alphanumeric characters, and that the returned string will always be in the format of "XXXXX-X", where "X" represents any alphanumeric character.
   @function
   @param {string} str - The input string
   @returns {string} - A unique identifier based on the input string
@@ -23,10 +23,11 @@ const getId = (str: string): string => {
 
 /**
   Check if a class exists in the current document's head styles.
+  The className parameter should only be a string, and that the function will return null if the class does not exist in the document's head styles.
   @param {any} className - The class name to check for.
   @returns {(boolean | null)} Returns true if the class exists, null if it does not.
 */
-const classExists = (className: any) => {
+const classExists = (className: string): (boolean | null) => {
   const styleTags = Array.from(document.head.getElementsByTagName('style'));
 
   for (const styleTag of styleTags) {
@@ -54,6 +55,7 @@ const cssObjectToString = (cssObject: any) => {
 
   /**
     Recursive function that traverses the CSS object and builds the CSS string.
+    The cssObject parameter should only be an object and that the returned string will always be a valid CSS string.
     @param {any} obj - The current object being traversed.
     @param {string} [selector='', newScope=false] - The current selector and whether a new scope is being created.
   */
@@ -84,6 +86,8 @@ type SortedCSSObject = {
 };
 
 /**
+  The first parameter should always be a React component and the second parameter should always be a function that takes in props and returns an object representing CSS styles, 
+  and that the returned function will always return a higher-order component that applies the styles to the passed in component and adds a unique className.
   @function
   @param {React.Component} Component - A React component that will be styled
   @param {Function} styles - A function that takes in props and returns an object representing CSS styles
