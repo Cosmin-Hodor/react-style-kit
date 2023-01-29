@@ -46,7 +46,7 @@ const classExists = (className: string): (boolean | null) => {
 
 /**
   Converts a CSS object to a string.
-  @param {any} cssObject - The CSS object to be converted to a string.
+  @param {object} cssObject - The CSS object to be converted to a string.
   @returns {string} - The resulting CSS string.
 */
 const cssObjectToString = (cssObject: object): string => {
