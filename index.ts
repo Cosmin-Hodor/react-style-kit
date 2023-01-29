@@ -1,4 +1,11 @@
 /**
+  Converts an object to a string and returns it.
+  @param {object} obj - The object to convert to a string.
+  @returns {string} The string representation of the input object, or an empty string if the object is falsy.
+*/
+const stringifyObject = (obj: object): string => (JSON.stringify(obj) || '').toString();
+
+/**
   The position parameter should only accept values between 1 and 26, and that the returned string will always be uppercase.
   @function
   @param {number} position - The position of a character in the alphabet (1-based)
@@ -46,12 +53,12 @@ const classExists = (className: string): (boolean | null) => {
 
 /**
   Converts a CSS object to a string.
-  @param {object} cssObject - The CSS object to be converted to a string.
+  @param {any} cssObject - The CSS object to be converted to a string.
   @returns {string} - The resulting CSS string.
 */
 const cssObjectToString = (cssObject: object): string => {
   const cssStrings: any[] = [];
-  const cssString = (JSON.stringify(cssObject) || '').toString();
+  const cssString = stringifyObject(cssObject);
 
   /**
     Recursive function that traverses the CSS object and builds the CSS string.
@@ -59,7 +66,7 @@ const cssObjectToString = (cssObject: object): string => {
     @param {any} obj - The current object being traversed.
     @param {string} [selector='', newScope=false] - The current selector and whether a new scope is being created.
   */
-  function traverse(obj: any, selector: string = '', newScope = false) {
+  function traverse(obj: { [key: string]: any }, selector: string = '', newScope: boolean = false) {
     const pointer = `${cssStrings?.length ? '}' : ''}.dom-${getId(cssString)} ${newScope ? selector : ''} { `;
     cssStrings.push(pointer);
 
@@ -105,7 +112,7 @@ const styled = <P extends object, C extends React.ComponentType<P>>(
       });
     };
 
-    const cssString = (JSON.stringify(sortedObject) || '').toString();
+    const cssString = stringifyObject(sortedObject);
     const styling = `${cssObjectToString(sortedObject)}`;
 
     if (!classExists(`.dom-${getId(cssString)}`)) {
@@ -115,7 +122,7 @@ const styled = <P extends object, C extends React.ComponentType<P>>(
     };
 
     return (
-      <Component {...props as P & { className?: string }} className={`dom-${getId(cssString)}${!!props?.className ? ` ${props?.className}` : ''}`} >
+      <Component {...props as P} className={`dom-${getId(cssString)}${!!props?.className ? ` ${props?.className}` : ''}`} >
         {props.children}
       </Component>
     );
