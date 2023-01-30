@@ -31,7 +31,7 @@ The code uses some utility functions getChar, getId, classExists and cssObjectTo
 
 - classExists takes a className, looks in the head tag for all the style tags, checks all the rules in the style tags and returns true if the className passed as argument exists in any of the rules.
 
-- cssObjectToString takes in one parameter, "cssObject", which is of type "any". It converts the "cssObject" to a string and creates an array called "cssStrings" to store the resulting CSS string. The function then uses a recursive helper function called "traverse" to iterate through the properties and values of the "cssObject" and appends them to the "cssStrings" array in the proper CSS syntax. Finally, the function returns the "cssStrings" array joined as a single string.
+- cssObjectToString takes in one parameter, "cssObject", which is of type "object". It converts the "cssObject" to a string and creates an array called "cssStrings" to store the resulting CSS string. The function then uses a recursive helper function called "traverse" to iterate through the properties and values of the "cssObject" and appends them to the "cssStrings" array in the proper CSS syntax. Finally, the function returns the "cssStrings" array joined as a single string.
 
 ### Code example:
 
