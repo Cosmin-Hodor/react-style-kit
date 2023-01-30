@@ -53,7 +53,7 @@ const classExists = (className: string): (boolean | null) => {
 
 /**
   Converts a CSS object to a string.
-  @param {any} cssObject - The CSS object to be converted to a string.
+  @param {object} cssObject - The CSS object to be converted to a string.
   @returns {string} - The resulting CSS string.
 */
 const cssObjectToString = (cssObject: object): string => {
@@ -63,7 +63,7 @@ const cssObjectToString = (cssObject: object): string => {
   /**
     Recursive function that traverses the CSS object and builds the CSS string.
     The cssObject parameter should only be an object and that the returned string will always be a valid CSS string.
-    @param {any} obj - The current object being traversed.
+    @param {object} obj - The current object being traversed.
     @param {string} [selector='', newScope=false] - The current selector and whether a new scope is being created.
   */
   function traverse(obj: { [key: string]: any }, selector: string = '', newScope: boolean = false) {
