@@ -50,7 +50,7 @@ const Container = styled('div', (props) => ({
 ```
 
 #### Support
-If you enjoy the work and want to reward it, you can [buy me a coffee](https://www.buymeacoffee.com/CHodor), although it really isn't required!
+If you enjoy the work and want to reward it, you can [buy me a coffee](https://gist.github.com/Cosmin-Hodor/5d7f590d0419af493b2920f42aec7561), although it really isn't required!
 
 Freedom of knowledge should be a universal right.
 
