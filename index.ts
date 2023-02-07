@@ -25,7 +25,9 @@ const getId = (str: string): string => {
     hash = str.charCodeAt(i) + ((hash << 5) - hash);
   };
 
-  return `${(hash.toString().substring(0, 5)).replace('-', '')}-${getChar(Math.abs(hash % 10))}`;
+  const parsedHash = hash.toString().substring(0, 5).replace('-', '')
+
+  return `${parsedHash}-${getChar(Math.abs((parseInt(parsedHash) % 10 || 1)))}`;
 };
 
 /**
@@ -57,7 +59,17 @@ const classExists = (className: string): (boolean | null) => {
   @returns {string} - The resulting CSS string.
 */
 const cssObjectToString = (cssObject: object): string => {
-  const cssStrings: any[] = [];
+  type cssStringHolder = {
+    [key: string]: string[],
+    main: string[],
+    newScope: string[],
+  };
+
+  const cssStrings: cssStringHolder = {
+    main: [],
+    newScope: [],
+  };
+
   const cssString = stringifyObject(cssObject);
 
   /**
@@ -67,8 +79,10 @@ const cssObjectToString = (cssObject: object): string => {
     @param {string} [selector='', newScope=false] - The current selector and whether a new scope is being created.
   */
   function traverse(obj: { [key: string]: any }, selector: string = '', newScope: boolean = false) {
-    const pointer = `${cssStrings?.length ? '}' : ''}.dom-${getId(cssString)} ${newScope ? selector : ''} { `;
-    cssStrings.push(pointer);
+    const stringHolder = newScope ? 'newScope' : 'main';
+
+    const pointer = `${cssStrings[stringHolder].length ? '}' : ''} .dom-${getId(cssString)}${newScope ? selector : ''} { `;
+    cssStrings[stringHolder].push(pointer);
 
     for (const property in obj) {
       if (typeof obj[property] === 'object') {
@@ -77,15 +91,15 @@ const cssObjectToString = (cssObject: object): string => {
         const cssProperty = property.replace(/([A-Z])/g, '-$1').toLowerCase();
         const value = obj[property];
         if (value) {
-          cssStrings.push(`${cssProperty}: ${value}; `);
+          cssStrings[stringHolder].push(`${cssProperty}: ${value}; `);
         };
       };
     };
-    !newScope && cssStrings.push(' }');
+    cssStrings[stringHolder].push(' }');
   };
 
   traverse(cssObject);
-  return cssStrings.join('');
+  return [...cssStrings.main, ...cssStrings.newScope].join('');
 };
 
 /**
@@ -99,8 +113,8 @@ const cssObjectToString = (cssObject: object): string => {
 const styled = <P extends object, C extends React.ComponentType<P>>(
   Component: C | string,
   styles: (props: P) => object,
-): React.FunctionComponent<React.PropsWithChildren<P & { className?: string }>> => {
-  return (props: React.PropsWithChildren<P & { className?: string }>) => {
+): React.FunctionComponent<React.PropsWithChildren<P & any>> => {
+  return (props: React.PropsWithChildren<P & any>) => {
     const sortedObject: { [key: string]: any } = {};
     const styleProps: { [key: string]: any } = styles(props);
 
