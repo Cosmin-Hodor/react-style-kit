@@ -13,25 +13,27 @@ Do as you please with it, no responsability taken on the owners behalf.
 
 Am not responsable for any damages or potential changes brought by other contributors, if any.
 
-## How to
+## About
 
-This code exports a single function styled that takes two arguments: a React component and a CSS object.
+This code exports a Higher-Order Component (HOC) called styled that allows for defining styles for a given component. 
 
-The styled function generates a unique class name based on the CSS object passed to it, and checks if that class name already exists in the page's head tag.
+The component and its styles are passed as arguments to styled, which returns a new functional component that wraps the given component. 
 
-If the class name does not exist, it creates a new style tag with the styles defined in the CSS object, and adds the class name to the React component.
+When the functional component is rendered, it checks whether a style class matching the styles for the component exists. If it does not, the styles are added to the head of the HTML document as a new style tag. 
 
-The generated class name is a combination of a 5-digit hash of the CSS object, and a character derived from the last digit of the hash.
+The returned component then adds a class to its className property that corresponds to the defined styles, so that the styles are applied to the component when it is rendered.
 
-The code uses some utility functions getChar, getId, classExists and cssObjectToString to achieve this.
+-stringifyObject - Given an object, it returns a string representation of it or an empty string if the object is empty.
 
-- getChar takes a position and returns the character that corresponds to that position in the ASCII table.
+-getChar - Given a number, it returns the corresponding character from the ASCII table using String.fromCharCode.
 
-- getId takes a string, creates a hash from it, and returns a 5-digit hash plus a character that corresponds to the last digit of the hash.
+-getId - Given a string, it generates a hash code from the string and returns a modified string in the format of "hash-char".
 
-- classExists takes a className, looks in the head tag for all the style tags, checks all the rules in the style tags and returns true if the className passed as argument exists in any of the rules.
+-classExists - Given a class name, it checks if the class already exists in the document's head styles and returns true if it exists, false otherwise.
 
-- cssObjectToString takes in one parameter, "cssObject", which is of type "object". It converts the "cssObject" to a string and creates an array called "cssStrings" to store the resulting CSS string. The function then uses a recursive helper function called "traverse" to iterate through the properties and values of the "cssObject" and appends them to the "cssStrings" array in the proper CSS syntax. Finally, the function returns the "cssStrings" array joined as a single string.
+-cssObjectToString - Given an object representing styles in CSS, it converts the object to a string representation of CSS.
+
+-styled - Given a React component and styles, it returns a Higher-Order Component (HOC) that applies the styles to the given component and returns the styled component. The styles are added to the document head if they do not exist.
 
 ### Code example:
 
