@@ -23,17 +23,17 @@ When the functional component is rendered, it checks whether a style class match
 
 The returned component then adds a class to its className property that corresponds to the defined styles, so that the styles are applied to the component when it is rendered.
 
--stringifyObject - Given an object, it returns a string representation of it or an empty string if the object is empty.
+- stringifyObject - Given an object, it returns a string representation of it or an empty string if the object is empty.
 
--getChar - Given a number, it returns the corresponding character from the ASCII table using String.fromCharCode.
+- getChar - Given a number, it returns the corresponding character from the ASCII table using String.fromCharCode.
 
--getId - Given a string, it generates a hash code from the string and returns a modified string in the format of "hash-char".
+- getId - Given a string, it generates a hash code from the string and returns a modified string in the format of "hash-char".
 
--classExists - Given a class name, it checks if the class already exists in the document's head styles and returns true if it exists, false otherwise.
+- classExists - Given a class name, it checks if the class already exists in the document's head styles and returns true if it exists, false otherwise.
 
--cssObjectToString - Given an object representing styles in CSS, it converts the object to a string representation of CSS.
+- cssObjectToString - Given an object representing styles in CSS, it converts the object to a string representation of CSS.
 
--styled - Given a React component and styles, it returns a Higher-Order Component (HOC) that applies the styles to the given component and returns the styled component. The styles are added to the document head if they do not exist.
+- styled - Given a React component and styles, it returns a Higher-Order Component (HOC) that applies the styles to the given component and returns the styled component. The styles are added to the document head if they do not exist.
 
 ### Code example:
 
