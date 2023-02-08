@@ -1,24 +1,9 @@
-/**
-  Converts an object to a string and returns it.
-  @param {object} obj - The object to convert to a string.
-  @returns {string} The string representation of the input object, or an empty string if the object is falsy.
-*/
-const stringifyObject = (obj: object): string => (JSON.stringify(obj) || '').toString();
+import isEmpty from '../isEmpty';
 
-/**
-  The position parameter should only accept values between 1 and 26, and that the returned string will always be uppercase.
-  @function
-  @param {number} position - The position of a character in the alphabet (1-based)
-  @returns {string} - The corresponding character in the alphabet
-*/
+const stringifyObject = (obj: object): string => !isEmpty(obj) ? (JSON.stringify(obj) || '').toString() : '';
+
 const getChar = (position: number): string => String.fromCharCode(Number(position) + 64);
 
-/**
-  The input string should only contain alphanumeric characters, and that the returned string will always be in the format of "XXXXX-X", where "X" represents any alphanumeric character.
-  @function
-  @param {string} str - The input string
-  @returns {string} - A unique identifier based on the input string
-*/
 const getId = (str: string): string => {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
@@ -30,12 +15,6 @@ const getId = (str: string): string => {
   return `${parsedHash}-${getChar(Math.abs((parseInt(parsedHash) % 10 || 1)))}`;
 };
 
-/**
-  Check if a class exists in the current document's head styles.
-  The className parameter should only be a string, and that the function will return null if the class does not exist in the document's head styles.
-  @param {any} className - The class name to check for.
-  @returns {(boolean | null)} Returns true if the class exists, null if it does not.
-*/
 const classExists = (className: string): (boolean | null) => {
   const styleTags = Array.from(document.head.getElementsByTagName('style'));
 
@@ -53,11 +32,6 @@ const classExists = (className: string): (boolean | null) => {
   return null;
 };
 
-/**
-  Converts a CSS object to a string.
-  @param {object} cssObject - The CSS object to be converted to a string.
-  @returns {string} - The resulting CSS string.
-*/
 const cssObjectToString = (cssObject: object): string => {
   type cssStringHolder = {
     [key: string]: string[],
@@ -72,12 +46,6 @@ const cssObjectToString = (cssObject: object): string => {
 
   const cssString = stringifyObject(cssObject);
 
-  /**
-    Recursive function that traverses the CSS object and builds the CSS string.
-    The cssObject parameter should only be an object and that the returned string will always be a valid CSS string.
-    @param {any} obj - The current object being traversed.
-    @param {string} [selector='', newScope=false] - The current selector and whether a new scope is being created.
-  */
   function traverse(obj: { [key: string]: any }, selector: string = '', newScope: boolean = false) {
     const stringHolder = newScope ? 'newScope' : 'main';
 
@@ -98,18 +66,13 @@ const cssObjectToString = (cssObject: object): string => {
     cssStrings[stringHolder].push(' }');
   };
 
-  traverse(cssObject);
+  if (!isEmpty(cssObject)) {
+    traverse(cssObject);
+  };
+
   return [...cssStrings.main, ...cssStrings.newScope].join('');
 };
 
-/**
-  The first parameter should always be a React component and the second parameter should always be a function that takes in props and returns an object representing CSS styles, 
-  and that the returned function will always return a higher-order component that applies the styles to the passed in component and adds a unique className.
-  @function
-  @param {React.Component} Component - A React component that will be styled
-  @param {Function} styles - A function that takes in props and returns an object representing CSS styles
-  @returns {Function} - A higher-order component that applies the styles to the passed in component and adds a unique className
-*/
 const styled = <P extends object, C extends React.ComponentType<P>>(
   Component: C | string,
   styles: (props: P) => object,
@@ -118,7 +81,7 @@ const styled = <P extends object, C extends React.ComponentType<P>>(
     const sortedObject: { [key: string]: any } = {};
     const styleProps: { [key: string]: any } = styles(props);
 
-    if (styleProps) {
+    if (styleProps && !isEmpty(styleProps)) {
       Object.keys(styleProps).sort().forEach(key => {
         if (styleProps.hasOwnProperty(key)) {
           sortedObject[key] = styleProps[key];
@@ -129,14 +92,16 @@ const styled = <P extends object, C extends React.ComponentType<P>>(
     const cssString = stringifyObject(sortedObject);
     const styling = `${cssObjectToString(sortedObject)}`;
 
-    if (!classExists(`.dom-${getId(cssString)}`)) {
+    if (!classExists(`.dom-${getId(cssString)}`) && !isEmpty(cssString)) {
       const style = document.createElement('style');
       style.innerHTML = styling;
       document.head.appendChild(style);
     };
 
+    const builtClassNames = `${!isEmpty(cssString) ? `dom-${getId(cssString)}` : ''}${!!props.className ? ` ${props.className}` : ''}`;
+
     return (
-      <Component {...props as P} className={`dom-${getId(cssString)}${!!props?.className ? ` ${props?.className}` : ''}`} >
+      <Component {...props as P} {...!isEmpty(builtClassNames) && { className: builtClassNames }} >
         {props.children}
       </Component>
     );
