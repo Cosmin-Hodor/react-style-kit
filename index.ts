@@ -1,4 +1,10 @@
-import isEmpty from '../isEmpty';
+const isEmpty = (value: object | string | []) => {
+  if (value === null || value === undefined) return true;
+  if (typeof value === 'string' && value.length === 0) return true;
+  if (Array.isArray(value) && value.length === 0) return true;
+  if (typeof value === 'object' && Object.keys(value).length === 0) return true;
+  return false;
+};
 
 const stringifyObject = (obj: object): string => !isEmpty(obj) ? (JSON.stringify(obj) || '').toString() : '';
 
