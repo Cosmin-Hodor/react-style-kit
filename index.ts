@@ -38,7 +38,7 @@ const classExists = (className: string): (boolean | null) => {
   return null;
 };
 
-const cssObjectToString = (cssObject: object): string => {
+const cssObjectToString = (cssObject: object, parentObject?: object): string => {
   type cssStringHolder = {
     [key: string]: string[],
     main: string[],
@@ -48,19 +48,26 @@ const cssObjectToString = (cssObject: object): string => {
   const cssStrings: cssStringHolder = {
     main: [],
     newScope: [],
+    media: [],
   };
 
   const cssString = stringifyObject(cssObject);
+  const parentString = parentObject && stringifyObject(parentObject);
 
   function traverse(obj: { [key: string]: any }, selector: string = '', newScope: boolean = false) {
     const stringHolder = newScope ? 'newScope' : 'main';
 
-    const pointer = `${cssStrings[stringHolder].length ? '}' : ''} .dom-${getId(cssString)}${newScope ? selector : ''} { `;
+    const pointer = `${cssStrings[stringHolder].length && !newScope ? '}' : ''} .dom-${getId(parentString || cssString)}${newScope ? selector : ''} { `;
     cssStrings[stringHolder].push(pointer);
 
     for (const property in obj) {
       if (typeof obj[property] === 'object') {
-        traverse(obj[property], property, true);
+        if (property.startsWith('@media') || property.startsWith('[class')) {
+          const mediaRules = cssObjectToString(obj[property], obj);
+          cssStrings.media.push(` ${property} { ${mediaRules} } `);
+        } else {
+          traverse(obj[property], property, true);
+        }
       } else {
         const cssProperty = property.replace(/([A-Z])/g, '-$1').toLowerCase();
         const value = obj[property];
@@ -76,7 +83,7 @@ const cssObjectToString = (cssObject: object): string => {
     traverse(cssObject);
   };
 
-  return [...cssStrings.main, ...cssStrings.newScope].join('');
+  return [...cssStrings.main, ...cssStrings.newScope, ...cssStrings.media].join('');
 };
 
 const styled = <P extends object, C extends React.ComponentType<P>>(
