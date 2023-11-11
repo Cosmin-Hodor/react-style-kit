@@ -1,7 +1,8 @@
-import { cssStringHolder } from "../packaged/types";
 import { getId } from "./getId";
 import { isEmpty } from "./isEmpty";
 import { stringifyObject } from "./stringifyObject";
+
+import { cssStringHolder } from "../types";
 
 export const cssObjectToString = (cssObject: object, parentObject?: object): string => {
 	const cssStrings: cssStringHolder = {

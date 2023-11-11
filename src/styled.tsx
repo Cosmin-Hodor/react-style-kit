@@ -5,10 +5,23 @@ import { getId } from "./getId";
 import { isEmpty } from "./isEmpty";
 import { stringifyObject } from "./stringifyObject";
 
+const styleCache = new Map();
+
 const styled = <P extends object, C extends React.ComponentType<P>>(
 	Component: C | string,
 	styles: (props: P) => object
 ): React.FunctionComponent<React.PropsWithChildren<P & { className?: string }>> => {
+	const componentStyles = styles({} as P);
+	const styleString = JSON.stringify(componentStyles);
+
+	if (styleCache.has(styleString)) {
+		const cachedClassName = styleCache.get(styleString);
+		return (props: React.PropsWithChildren<P & { className?: string }>) => {
+			const mergedClassName = `${cachedClassName} ${props.className || ""}`;
+			return <Component {...props} className={mergedClassName} />;
+		};
+	}
+
 	return (props: React.PropsWithChildren<P & { className?: string }>) => {
 		const sortedObject: { [key: string]: any } = {};
 		const styleProps: { [key: string]: any } = styles(props);
@@ -30,6 +43,7 @@ const styled = <P extends object, C extends React.ComponentType<P>>(
 			const style = document.createElement("style");
 			style.innerHTML = styling;
 			document.head.appendChild(style);
+			styleCache.set(styleString, `dom-${getId(cssString)}`);
 		}
 
 		const builtClassNames = `${!isEmpty(cssString) ? `dom-${getId(cssString)}` : ""}${!!props.className ? ` ${props.className}` : ""}`;
