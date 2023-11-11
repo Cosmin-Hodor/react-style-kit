@@ -1,0 +1,13 @@
+{
+	"compilerOptions": {
+		"target": "ESNext",
+		"module": "CommonJS",
+		"outDir": "./dist",
+		"strict": true,
+		"jsx": "react",
+		"esModuleInterop": true
+	},
+	"files": ["src/styled.tsx"],
+	"include": ["src/**/*.ts"],
+	"exclude": ["node_modules"]
+}
