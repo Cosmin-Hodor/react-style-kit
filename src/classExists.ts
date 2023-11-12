@@ -1,16 +1,6 @@
-export const classExists = (className: string): boolean | null => {
-	const styleTags = Array.from(document.head.getElementsByTagName("style"));
+import { StyleMapEntry } from '../types';
 
-	for (const styleTag of styleTags) {
-		const styleTagText = styleTag.textContent || "";
-		const styleRules = styleTagText.split("}");
-		for (const styleRule of styleRules) {
-			const selector = styleRule.split("{")[0].trim();
-			if (selector.replace(" ", "") === className) {
-				return true;
-			}
-		}
-	}
+export const styleMap = new Map<string, StyleMapEntry>();
 
-	return null;
-};
+// Function to check if a className already exists in the style map
+export const classExists = (className: string): boolean => styleMap.has(className);

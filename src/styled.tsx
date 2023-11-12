@@ -1,59 +1,41 @@
-import React from "react";
-import { classExists } from "./classExists";
-import { cssObjectToString } from "./cssObjectToString";
-import { getId } from "./getId";
-import { isEmpty } from "./isEmpty";
-import { stringifyObject } from "./stringifyObject";
+import React from 'react';
+import { CSSObject } from '../types';
+import { getId } from '../utils/getId';
+import { isEmpty } from '../utils/isEmpty';
+import { stringifyObject } from '../utils/stringifyObject';
+import { flattenCSSObject } from './flattenObject';
+import { cssObjectToString } from './cssObjectToString';
+import { classExists } from './classExists';
 
-const styleCache = new Map();
-
-const styled = <P extends object, C extends React.ComponentType<P>>(
+// The main `styled` function to create styled components
+const styled = <P extends object, C extends React.ComponentType<P & { className?: string }>>(
 	Component: C | string,
-	styles: (props: P) => object
+	styles: (props: P & { className?: string }) => CSSObject
 ): React.FunctionComponent<React.PropsWithChildren<P & { className?: string }>> => {
-	const componentStyles = styles({} as P);
-	const styleString = JSON.stringify(componentStyles);
-
-	if (styleCache.has(styleString)) {
-		const cachedClassName = styleCache.get(styleString);
-		return (props: React.PropsWithChildren<P & { className?: string }>) => {
-			const mergedClassName = `${cachedClassName} ${props.className || ""}`;
-			return <Component {...props} className={mergedClassName} />;
-		};
-	}
-
 	return (props: React.PropsWithChildren<P & { className?: string }>) => {
-		const sortedObject: { [key: string]: any } = {};
-		const styleProps: { [key: string]: any } = styles(props);
+		const styleProps = styles(props);
+		// Flatten the style properties to a single-level object
+		const flattenedStyleProps = flattenCSSObject(styleProps);
 
-		if (styleProps && !isEmpty(styleProps)) {
-			Object.keys(styleProps)
-				.sort()
-				.forEach((key) => {
-					if (styleProps.hasOwnProperty(key)) {
-						sortedObject[key] = styleProps[key];
-					}
-				});
-		}
+		// Generate a unique class name for the component
+		const cssString = stringifyObject(flattenedStyleProps);
+		const className = `dom-${getId(cssString)}`;
 
-		const cssString = stringifyObject(sortedObject);
-		const styling = `${cssObjectToString(sortedObject)}`;
-
-		if (!classExists(`.dom-${getId(cssString)}`) && !isEmpty(cssString)) {
-			const style = document.createElement("style");
-			style.innerHTML = styling;
+		// Create a new style element and append it to the document head if the class does not exist
+		if (!classExists(className) && !isEmpty(cssString)) {
+			const style = document.createElement('style');
+			style.setAttribute('data-class', className);
+			style.innerHTML = cssObjectToString(flattenedStyleProps);
 			document.head.appendChild(style);
-			styleCache.set(styleString, `dom-${getId(cssString)}`);
 		}
 
-		const builtClassNames = `${!isEmpty(cssString) ? `dom-${getId(cssString)}` : ""}${!!props.className ? ` ${props.className}` : ""}`;
+		// Combine generated class name with any existing class names passed as props
+		const builtClassNames = `${className}${props.className ? ` ${props.className}` : ''}`;
 
-		return (
-			<Component {...(props as P)} {...(!isEmpty(builtClassNames) && { className: builtClassNames })}>
-				{props.children}
-			</Component>
-		);
+		// Return the React element with applied styles
+		return React.createElement(Component, { ...props, className: builtClassNames }, props.children);
 	};
 };
 
+// Export the styled function
 export default styled;

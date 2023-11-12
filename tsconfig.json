@@ -8,6 +8,6 @@
 		"esModuleInterop": true
 	},
 	"files": ["src/styled.tsx"],
-	"include": ["src/**/*.ts"],
+	"include": ["src/**/*.ts", "utils/stringifyObject.ts", "utils/getChar.ts", "utils/getId.ts"],
 	"exclude": ["node_modules"]
 }
