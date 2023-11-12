@@ -35,5 +35,4 @@ const styled = <P extends object, C extends React.ComponentType<P & { className?
 	};
 };
 
-// Export the styled function
 export default styled;
