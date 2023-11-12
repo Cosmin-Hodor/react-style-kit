@@ -42,7 +42,8 @@ import styled from './styled';
 
 const Container = styled('div', (props) => ({
   background: props.bg,
-  width: '200px',
+  width: '200px',				// Ensure that the value is serialized as a string
+
   height: '100px',
 }));
 
@@ -50,3 +51,6 @@ const Container = styled('div', (props) => ({
   This is a simple React component
 </Container>
 ```
+
+## To Do
+- Add type definitions for html properties, such as "placeholder", etc
