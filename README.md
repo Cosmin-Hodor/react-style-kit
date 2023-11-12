@@ -42,10 +42,32 @@ It does not duplicate CSS styles and even more, inherits CSS properties from oth
 ```
 import styled from './styled';
 
+// Without props
 const Container = styled('div', () => ({
   display: 'flex',
   justifyContent: 'center',
   // other styles...
+}));
+
+// With props
+const Container = styled('div', (props) => ({
+  display: 'flex',
+  justifyContent: 'center',
+  ...props.bg && {
+    background: props.bg,
+  },
+  // other styles...
+}));
+
+// With media query
+const Container = styled('div', () => ({
+  display: 'flex',
+  justifyContent: 'center',
+  // other styles...
+
+  '@media (max-width: 720px)': {  
+    flexDirection: 'column',
+  },
 }));
 
 <Container>
@@ -53,7 +75,7 @@ const Container = styled('div', () => ({
 </Container>
 ```
 
-##To Do
+## To Do
 - Expand type definitions to cover more HTML attributes and ensure better type safety.
 - Enhance media query handling for more complex styling scenarios.
 - Implement caching mechanisms for improved performance.
