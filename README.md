@@ -4,53 +4,56 @@ Contributions are always welcome!
 
 Feel free to open PR's with changes and upgrades.
 
-
 ## Distribution & Usage
 
 Each written line of code is open to the public and freely available.
 
-Do as you please with it, no responsability taken on the owners behalf.
+Do as you please with it, no responsibility taken on the owner's behalf.
 
-Am not responsable for any damages or potential changes brought by other contributors, if any.
+I am not responsible for any damages or potential changes brought by other contributors, if any.
 
 ## About
 
-This code exports a Higher-Order Component (HOC) called styled that allows for defining styles for a given component. 
+This code offers a dynamic approach to manage CSS styles in React applications. It includes a variety of utility functions and a style management system that can be integrated into React components.
 
-The component and its styles are passed as arguments to styled, which returns a new functional component that wraps the given component. 
+Key functionalities include:
 
-When the functional component is rendered, it checks whether a style class matching the styles for the component exists. If it does not, the styles are added to the head of the HTML document as a new style tag. 
+- `stringifyObject`: Converts an object to its string representation, or returns an empty string if the object is empty.
 
-The returned component then adds a class to its className property that corresponds to the defined styles, so that the styles are applied to the component when it is rendered.
+- `getChar`: Given a number, returns the corresponding ASCII character.
 
-- stringifyObject - Given an object, it returns a string representation of it or an empty string if the object is empty.
+- `getId`: Generates a unique hash string based on input, useful for creating unique class names.
 
-- getChar - Given a number, it returns the corresponding character from the ASCII table using String.fromCharCode.
+- `classExists`: Checks if a given class name already exists in the document's head styles.
 
-- getId - Given a string, it generates a hash code from the string and returns a modified string in the format of "hash-char".
+- `cssObjectToString`: Transforms a CSS object into a string representation of CSS styles.
 
-- classExists - Given a class name, it checks if the class already exists in the document's head styles and returns true if it exists, false otherwise.
+- `generateMediaQueryStyles` and `generateCSSProperties`: Functions for processing CSS objects, including media queries, into CSS strings.
 
-- cssObjectToString - Given an object representing styles in CSS, it converts the object to a string representation of CSS.
+- `processCssObject`: Processes a given CSS object, appending the generated styles to the document's head and managing style reuse.
 
-- styled - Given a React component and styles, it returns a Higher-Order Component (HOC) that applies the styles to the given component and returns the styled component. The styles are added to the document head if they do not exist.
+- `styleMap`: A Map object that keeps track of existing styles to prevent duplicates.
+
+The system is designed to generate and inject CSS styles dynamically into the HTML document's head, facilitating efficient style management in React applications.
+It does not duplicate CSS styles and even more, inherits CSS properties from other CSS classes for newly created components, if any are available.
 
 ### Code example:
 
 ```
 import styled from './styled';
 
-const Container = styled('div', (props) => ({
-  background: props.bg,
-  width: '200px',				// Ensure that the value is serialized as a string
-
-  height: '100px',
+const Container = styled('div', () => ({
+  display: 'flex',
+  justifyContent: 'center',
+  // other styles...
 }));
 
-<Container bg={'red'}>
-  This is a simple React component
+<Container>
+  This is a dynamically styled React component
 </Container>
 ```
 
-## To Do
-- Add type definitions for html properties, such as "placeholder", etc
+##To Do
+- Expand type definitions to cover more HTML attributes and ensure better type safety.
+- Enhance media query handling for more complex styling scenarios.
+- Implement caching mechanisms for improved performance.
