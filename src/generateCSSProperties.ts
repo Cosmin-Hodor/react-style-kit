@@ -16,9 +16,6 @@ const processNestedCSSObject = (nestedCSSObject: CSSObject, parentSelector: stri
 			nestedCSSProps += processNestedCSSObject(nestedCSSObject[nestedProperty], `${parentSelector}${nestedProperty}`, className);
 		} else {
 			// Handle regular and keyframes CSS properties
-			console.log(nestedCSSObject);
-			console.log('nestedProperty: ', nestedProperty);
-
 			const cssProperty = nestedProperty.replace(/([A-Z])/g, '-$1').toLowerCase();
 			nestedCSSProps += `${cssProperty}: ${nestedCSSObject[nestedProperty]}; `;
 		}
