@@ -1,9 +1,7 @@
 import { StyleMapEntry, CssStringHolder } from '../types';
 import { generateCSSProperties } from './generateCSSProperties';
-import { getId } from '../utils/getId';
 
-export const processCssObject = (obj: StyleMapEntry, cssStrings: CssStringHolder, parentString: string, cssString: string): void => {
-	const className = `dom-${getId(parentString || cssString)}`;
+export const processCssObject = (obj: StyleMapEntry, cssStrings: CssStringHolder, className: string): void => {
 	const cssProperties = generateCSSProperties(obj, className);
 
 	if (cssProperties) {

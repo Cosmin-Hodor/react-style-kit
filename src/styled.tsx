@@ -23,7 +23,7 @@ const styled = <P extends object, C extends React.ComponentType<P & { className?
 		if (!classExists(className) && !isEmpty(cssString)) {
 			const style = document.createElement('style');
 			style.setAttribute('data-class', className);
-			style.innerHTML = cssObjectToString(styleProps);
+			style.innerHTML = cssObjectToString(styleProps, className);
 			document.head.appendChild(style);
 		}
 

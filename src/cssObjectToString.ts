@@ -1,6 +1,4 @@
 import { CSSObject, CssStringHolder, StyleMapEntry } from '../types';
-import { getId } from '../utils/getId';
-import { stringifyObject } from '../utils/stringifyObject';
 import { styleMap } from './classExists';
 import processCssObject from './processCssObject';
 
@@ -9,15 +7,13 @@ export type StyleMapEntryExtended = {
 };
 
 // Function to convert a CSS object into a CSS string with proper formatting
-export const cssObjectToString = (cssObject: CSSObject, parentObject?: object): string => {
+export const cssObjectToString = (cssObject: CSSObject, className: string): string => {
 	const cssStrings: CssStringHolder = {
 		main: [],
 		media: [],
 	};
 
 	// Stringify the current and parent objects for ID generation
-	const cssString = stringifyObject(cssObject);
-	const parentString = parentObject ? stringifyObject(parentObject) : '';
 	let isExtended = false;
 	let nonExtendedStyles: StyleMapEntryExtended = {};
 
@@ -40,9 +36,8 @@ export const cssObjectToString = (cssObject: CSSObject, parentObject?: object): 
 			// Update the style tag in the DOM to include the new class name if necessary
 			const styleTag = document.querySelector(`style[data-class="${cachedClassName}"]`);
 			if (styleTag) {
-				const newClassName = `dom-${getId(parentString || cssString)}`;
-				if (!styleTag.innerHTML.includes(newClassName)) {
-					const updatedCssContent = styleTag.innerHTML.replace(cachedClassName, `${cachedClassName}, .${newClassName}`);
+				if (!styleTag.innerHTML.includes(className)) {
+					const updatedCssContent = styleTag.innerHTML.replace(cachedClassName, `${cachedClassName}, .${className}`);
 					styleTag.innerHTML = updatedCssContent;
 				}
 			}
@@ -51,10 +46,10 @@ export const cssObjectToString = (cssObject: CSSObject, parentObject?: object): 
 	}
 
 	// Process the CSS object depending on whether it extends an existing class or not
-	processCssObject(isExtended ? nonExtendedStyles : (cssObject as any), cssStrings, parentString, cssString);
+	processCssObject(isExtended ? nonExtendedStyles : (cssObject as any), cssStrings, className);
 
 	// Add the processed CSS object to the style map
-	styleMap.set(`dom-${getId(parentString || cssString)}`, cssObject as StyleMapEntry);
+	styleMap.set(className, cssObject as StyleMapEntry);
 
 	// Combine and return all generated CSS strings, placing media queries last
 	return [...cssStrings.main, ...cssStrings.media].join('');

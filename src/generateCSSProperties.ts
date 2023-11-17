@@ -1,27 +1,45 @@
 import { CSSObject, StyleMapEntry } from '../types';
 import { generateMediaQueryStyles } from './generateMediaQueries';
 
-// Function to generate CSS property strings from a StyleMapEntry
+const processNestedCSSObject = (nestedCSSObject: CSSObject, parentSelector: string, className: string): string => {
+	let nestedCSSProps = '';
+	for (const nestedProperty in nestedCSSObject) {
+		if (nestedProperty.startsWith('@media')) {
+			// Handle media queries
+			const mediaQueryCSSObject = nestedCSSObject[nestedProperty];
+			if (typeof mediaQueryCSSObject === 'object' && !Array.isArray(mediaQueryCSSObject)) {
+				const mediaQueryCondition = nestedProperty.substring(7).trim();
+				nestedCSSProps += generateMediaQueryStyles(mediaQueryCSSObject as CSSObject, mediaQueryCondition, className);
+			}
+		} else if (typeof nestedCSSObject[nestedProperty] === 'object') {
+			// Recursively process nested objects (like &:hover)
+			nestedCSSProps += processNestedCSSObject(nestedCSSObject[nestedProperty], `${parentSelector}${nestedProperty}`, className);
+		} else {
+			// Handle regular and keyframes CSS properties
+			console.log(nestedCSSObject);
+			console.log('nestedProperty: ', nestedProperty);
+
+			const cssProperty = nestedProperty.replace(/([A-Z])/g, '-$1').toLowerCase();
+			nestedCSSProps += `${cssProperty}: ${nestedCSSObject[nestedProperty]}; `;
+		}
+	}
+	return `${parentSelector} { ${nestedCSSProps} }`;
+};
+
 export const generateCSSProperties = (obj: StyleMapEntry, className: string) => {
 	let cssProps = '';
-	let mediaQueries = '';
 
 	for (const property in obj) {
-		if (property.startsWith('@media')) {
-			// Ensure obj[property] is treated as an object
-			const mediaQueryCSSObject = obj[property];
-
-			if (typeof mediaQueryCSSObject === 'object' && !Array.isArray(mediaQueryCSSObject)) {
-				const mediaQueryCondition = property.substring(7).trim();
-				mediaQueries += generateMediaQueryStyles(mediaQueryCSSObject as CSSObject, mediaQueryCondition, className);
-			}
+		if (typeof obj[property] === 'object') {
+			// Process all nested objects including @keyframes and nested selectors
+			cssProps += processNestedCSSObject(obj[property] as any, `${property}`, className);
 		} else {
-			// Handle regular CSS properties
+			// Handle top-level CSS properties
 			const cssProperty = property.replace(/([A-Z])/g, '-$1').toLowerCase();
 			cssProps += `${cssProperty}: ${obj[property]}; `;
 		}
 	}
 
-	// Combine class properties and media queries correctly
-	return `${cssProps.length > 0 ? `.${className} { ${cssProps} }` : ''} ${mediaQueries}`;
+	// Return the combined class properties
+	return `${cssProps.length > 0 ? `.${className} { ${cssProps} }` : ''}`;
 };
