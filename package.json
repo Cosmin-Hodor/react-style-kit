@@ -1,23 +1,35 @@
 {
-  "name": "react-style-kit",
-  "version": "1.0.0",
-  "description": "Create and apply dynamic CSS styles easily in React based applications.",
-  "main": "dist/src/styled.tsx",
-  "scripts": {
-    "build": "tsc"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Cosmin-Hodor/react-style-kit.git"
-  },
-  "author": "Cosmin Hodor",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/Cosmin-Hodor/react-style-kit/issues"
-  },
-  "homepage": "https://github.com/Cosmin-Hodor/react-style-kit#readme",
-  "devDependencies": {
-    "@types/react": "^18.2.37",
-    "typescript": "^5.2.2"
-  }
+	"name": "react-style-kit",
+	"version": "1.0.9",
+	"description": "Create and apply dynamic CSS styles easily in React based applications.",
+	"main": "dist/src/styled.js",
+	"types": "dist/react-style-kit.d.ts",
+	"files": [
+		"dist"
+	],
+	"scripts": {
+		"build": "tsc && ncp types/react-style-kit.d.ts dist/react-style-kit.d.ts"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Cosmin-Hodor/react-style-kit.git"
+	},
+	"author": "Cosmin Hodor",
+	"keywords": [
+		"react",
+		"css",
+		"styles",
+		"css-in-js",
+		"react styled components"
+	],
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/Cosmin-Hodor/react-style-kit/issues"
+	},
+	"homepage": "https://github.com/Cosmin-Hodor/react-style-kit#readme",
+	"devDependencies": {
+		"@types/react": "^18.2.37",
+		"ncp": "^2.0.0",
+		"typescript": "^5.2.2"
+	}
 }
