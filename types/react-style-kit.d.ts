@@ -1,3 +1,4 @@
 declare module 'react-style-kit' {
-  export function styled(tag: string, styles: Function): React.ComponentType<any>;
+  const styled: (tag: string, styles: Function) => React.ComponentType<any>;
+  export default styled;
 }
