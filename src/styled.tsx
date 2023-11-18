@@ -32,8 +32,6 @@ const styled = <P extends object, C extends React.ComponentType<HTMLAttributes>>
 		const builtClassNames = `${className}${props.className ? ` ${props.className}` : ''}`;
 		const validProps = filterHTMLAttributes(props);
 
-		console.log('Valid props: ', validProps);
-
 		// Return the React element with applied styles
 		return React.createElement(Component, { ...validProps, className: builtClassNames }, props.children);
 	};
