@@ -27,7 +27,7 @@ It does not duplicate CSS styles and even more, inherits CSS properties from oth
 ### Code example:
 
 ```
-import styled from './styled';
+import styled from 'react-style-kit';
 
 // Without props
 const Container = styled('div', () => ({
