@@ -149,22 +149,6 @@ export const htmlAttributes: string[] = [
 	'type',
 ];
 
-export const validAttributes = (): string => {
-	let interfaceString = 'interface HTMLAttributes {\n';
-
-	htmlAttributes.forEach((attr) => {
-		if (attr.startsWith('on')) {
-			interfaceString += `  ${attr}?: (event: Event) => void;\n`;
-		} else {
-			interfaceString += `  ${attr}?: string;\n`;
-		}
-	});
-
-	interfaceString += '}';
-
-	return interfaceString;
-};
-
 const filterHTMLAttributes = (props: { [key: string]: any }) => {
 	const validHTMLAttributes = new Set(htmlAttributes);
 	return Object.keys(props)
