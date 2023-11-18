@@ -1,5 +1,5 @@
 import React from 'react';
-import { CSSObject } from '../types';
+import { CSSObject, HTMLAttributes } from '../types';
 import { getId } from '../utils/getId';
 import { isEmpty } from '../utils/isEmpty';
 import { stringifyObject } from '../utils/stringifyObject';
@@ -8,11 +8,11 @@ import { classExists } from './classExists';
 import filterHTMLAttributes from './isPropValid';
 
 // The main `styled` function to create styled components
-const styled = <P extends object, C extends React.ComponentType<P & { className?: string } & any>>(
+const styled = <P extends object, C extends React.ComponentType<HTMLAttributes>>(
 	Component: C | string,
-	styles: (props: P & { className?: string }) => CSSObject
-): React.FunctionComponent<React.PropsWithChildren<P & { className?: string }>> => {
-	return (props: React.PropsWithChildren<P & { className?: string }>) => {
+	styles: (props: P & HTMLAttributes) => CSSObject
+): React.FunctionComponent<React.PropsWithChildren<P & HTMLAttributes>> => {
+	return (props: React.PropsWithChildren<P & HTMLAttributes>) => {
 		const styleProps = styles(props);
 		// Flatten the style properties to a single-level object
 
@@ -31,6 +31,8 @@ const styled = <P extends object, C extends React.ComponentType<P & { className?
 		// Combine generated class name with any existing class names passed as props
 		const builtClassNames = `${className}${props.className ? ` ${props.className}` : ''}`;
 		const validProps = filterHTMLAttributes(props);
+
+		console.log('Valid props: ', validProps);
 
 		// Return the React element with applied styles
 		return React.createElement(Component, { ...validProps, className: builtClassNames }, props.children);
