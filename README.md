@@ -10,29 +10,14 @@ Each written line of code is open to the public and freely available.
 
 Do as you please with it, no responsibility taken on the owner's behalf.
 
-I am not responsible for any damages or potential changes brought by other contributors, if any.
+## Get started
+
+You can either download the package and import styled.tsx in your project or simply do ``npm i react-style-kit``.
+Link to NPM library: https://www.npmjs.com/package/react-style-kit
 
 ## About
 
 This code offers a dynamic approach to manage CSS styles in React applications. It includes a variety of utility functions and a style management system that can be integrated into React components.
-
-Key functionalities include:
-
-- `stringifyObject`: Converts an object to its string representation, or returns an empty string if the object is empty.
-
-- `getChar`: Given a number, returns the corresponding ASCII character.
-
-- `getId`: Generates a unique hash string based on input, useful for creating unique class names.
-
-- `classExists`: Checks if a given class name already exists in the document's head styles.
-
-- `cssObjectToString`: Transforms a CSS object into a string representation of CSS styles.
-
-- `generateMediaQueryStyles` and `generateCSSProperties`: Functions for processing CSS objects, including media queries, into CSS strings.
-
-- `processCssObject`: Processes a given CSS object, appending the generated styles to the document's head and managing style reuse.
-
-- `styleMap`: A Map object that keeps track of existing styles to prevent duplicates.
 
 The system is designed to generate and inject CSS styles dynamically into the HTML document's head, facilitating efficient style management in React applications.
 It does not duplicate CSS styles and even more, inherits CSS properties from other CSS classes for newly created components, if any are available.
