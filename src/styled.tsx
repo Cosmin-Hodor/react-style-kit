@@ -5,6 +5,7 @@ import { isEmpty } from '../utils/isEmpty';
 import { stringifyObject } from '../utils/stringifyObject';
 import { cssObjectToString } from './cssObjectToString';
 import { classExists } from './classExists';
+import filterHTMLAttributes from './isPropValid';
 
 // The main `styled` function to create styled components
 const styled = <P extends object, C extends React.ComponentType<P & { className?: string } & any>>(
@@ -29,9 +30,10 @@ const styled = <P extends object, C extends React.ComponentType<P & { className?
 
 		// Combine generated class name with any existing class names passed as props
 		const builtClassNames = `${className}${props.className ? ` ${props.className}` : ''}`;
+		const validProps = filterHTMLAttributes(props);
 
 		// Return the React element with applied styles
-		return React.createElement(Component, { ...props, className: builtClassNames }, props.children);
+		return React.createElement(Component, { ...validProps, className: builtClassNames }, props.children);
 	};
 };
 
