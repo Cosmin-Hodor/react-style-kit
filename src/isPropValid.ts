@@ -2,6 +2,7 @@ export const htmlAttributes: string[] = [
 	// Global Attributes
 	'accesskey',
 	'class',
+	'className',
 	'contenteditable',
 	'data-*',
 	'dir',
@@ -120,7 +121,7 @@ export const htmlAttributes: string[] = [
 	'target',
 	'type',
 	'value',
-  'defaultvalue',
+	'defaultvalue',
 	'width',
 
 	// Media Attributes

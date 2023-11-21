@@ -13,7 +13,8 @@ const styled = <P extends object, C extends React.ComponentType<HTMLAttributes>>
 	styles: (props: P & HTMLAttributes) => CSSObject
 ): React.FunctionComponent<React.PropsWithChildren<P & HTMLAttributes>> => {
 	return (props: React.PropsWithChildren<P & HTMLAttributes>) => {
-		const validProps = filterHTMLAttributes(props);
+		const { children, ...rest } = props || {};
+		const validProps = filterHTMLAttributes(rest);
 
 		const cssObject = styles(validProps);
 		const cssString = stringifyObject(cssObject);
@@ -29,9 +30,10 @@ const styled = <P extends object, C extends React.ComponentType<HTMLAttributes>>
 
 		// Combine generated class name with any existing class names passed as props
 		const builtClassNames = `${className}${validProps.className ? ` ${validProps.className}` : ''}`;
+
 		return (
 			<Component {...validProps} className={builtClassNames}>
-				{props.children}
+				{children}
 			</Component>
 		);
 	};
