@@ -16,15 +16,15 @@ const styled = <P extends object, C extends React.ComponentType<HTMLAttributes>>
 		const { children, ...rest } = props || {};
 		const validProps = filterHTMLAttributes(rest);
 
-		const cssObject = styles(props);
-		const cssString = stringifyObject(cssObject);
+		const cssObject = styles({ ...props });
+		const cssString = stringifyObject({ ...cssObject, ...props.inline });
 		const className = `dom-${getId(cssString)}`;
-
+    
 		// Create a new style element and append it to the document head if the class does not exist
 		if (!classExists(className) && !isEmpty(cssString)) {
 			const style = document.createElement('style');
 			style.setAttribute('data-class', className);
-			style.innerHTML = cssObjectToString(cssObject, className);
+			style.innerHTML = cssObjectToString({ ...cssObject, ...props.inline }, className);
 			document.head.appendChild(style);
 		}
 
