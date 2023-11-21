@@ -16,7 +16,7 @@ const styled = <P extends object, C extends React.ComponentType<HTMLAttributes>>
 		const { children, ...rest } = props || {};
 		const validProps = filterHTMLAttributes(rest);
 
-		const cssObject = styles(validProps);
+		const cssObject = styles(props);
 		const cssString = stringifyObject(cssObject);
 		const className = `dom-${getId(cssString)}`;
 
