@@ -120,6 +120,7 @@ export const htmlAttributes: string[] = [
 	'target',
 	'type',
 	'value',
+  'defaultvalue',
 	'width',
 
 	// Media Attributes

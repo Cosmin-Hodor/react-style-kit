@@ -13,27 +13,27 @@ const styled = <P extends object, C extends React.ComponentType<HTMLAttributes>>
 	styles: (props: P & HTMLAttributes) => CSSObject
 ): React.FunctionComponent<React.PropsWithChildren<P & HTMLAttributes>> => {
 	return (props: React.PropsWithChildren<P & HTMLAttributes>) => {
-		const styleProps = styles(props);
-		// Flatten the style properties to a single-level object
+		const validProps = filterHTMLAttributes(props);
 
-		// Generate a unique class name for the component
-		const cssString = stringifyObject(styleProps);
+		const cssObject = styles(validProps);
+		const cssString = stringifyObject(cssObject);
 		const className = `dom-${getId(cssString)}`;
 
 		// Create a new style element and append it to the document head if the class does not exist
 		if (!classExists(className) && !isEmpty(cssString)) {
 			const style = document.createElement('style');
 			style.setAttribute('data-class', className);
-			style.innerHTML = cssObjectToString(styleProps, className);
+			style.innerHTML = cssObjectToString(cssObject, className);
 			document.head.appendChild(style);
 		}
 
 		// Combine generated class name with any existing class names passed as props
-		const builtClassNames = `${className}${props.className ? ` ${props.className}` : ''}`;
-		const validProps = filterHTMLAttributes(props);
-
-		// Return the React element with applied styles
-		return React.createElement(Component, { ...validProps, className: builtClassNames }, props.children);
+		const builtClassNames = `${className}${validProps.className ? ` ${validProps.className}` : ''}`;
+		return (
+			<Component {...validProps} className={builtClassNames}>
+				{props.children}
+			</Component>
+		);
 	};
 };
 

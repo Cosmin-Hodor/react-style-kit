@@ -126,6 +126,7 @@ export interface HTMLAttributes {
   step?: string;
   target?: string;
   value?: string;
+  defaultValue?: string;
   width?: string;
 
   autoplay?: string;
