@@ -9,6 +9,7 @@ export const generateMediaQueryStyles = (cssObject: CSSObject, mediaQueryConditi
 		if (typeof value === 'string') {
 			// Convert camelCase to kebab-case for CSS properties
 			const cssProperty = key.replace(/([A-Z])/g, '-$1').toLowerCase();
+
 			styles += `${cssProperty}: ${value}; `;
 		}
 	}
