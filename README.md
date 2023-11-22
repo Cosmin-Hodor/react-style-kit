@@ -61,8 +61,3 @@ const Container = styled('div', () => ({
   This is a dynamically styled React component
 </Container>
 ```
-
-## To Do
-- Expand type definitions to cover more HTML attributes and ensure better type safety.
-- Enhance media query handling for more complex styling scenarios.
-- Implement caching mechanisms for improved performance.
